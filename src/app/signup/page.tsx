@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 
 type Method = "email" | "phone" | "oauth";
 
 export default function SignupPage() {
-  const supabase = getSupabaseBrowser();
   const router = useRouter();
 
   const [method, setMethod] = useState<Method>("email");
@@ -21,6 +20,8 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [emailConfirmed, setEmailConfirmed] = useState(false);
+
+  const getSupabase = useCallback(() => getSupabaseBrowser(), []);
 
   async function handleEmailSignup(e: React.FormEvent) {
     e.preventDefault();
@@ -39,7 +40,7 @@ export default function SignupPage() {
       return;
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { error } = await getSupabase().auth.signUp({
       email,
       password,
       options: {
@@ -62,7 +63,7 @@ export default function SignupPage() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithOtp({ phone });
+    const { error } = await getSupabase().auth.signInWithOtp({ phone });
 
     if (error) {
       setError(error.message);
@@ -79,7 +80,7 @@ export default function SignupPage() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.verifyOtp({
+    const { error } = await getSupabase().auth.verifyOtp({
       phone,
       token: otp,
       type: "sms",
@@ -98,7 +99,7 @@ export default function SignupPage() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await getSupabase().auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,

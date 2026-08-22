@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 
 type Method = "email" | "phone" | "oauth";
 
 export default function LoginPage() {
-  const supabase = getSupabaseBrowser();
   const router = useRouter();
 
   const [method, setMethod] = useState<Method>("email");
@@ -21,13 +20,15 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [magicLinkSent, setMagicLinkSent] = useState(false);
 
+  const getSupabase = useCallback(() => getSupabaseBrowser(), []);
+
   // ── Email + password sign in ──────────────────────────────
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await getSupabase().auth.signInWithPassword({
       email,
       password,
     });
@@ -47,7 +48,7 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await getSupabase().auth.signInWithOtp({
       email,
       options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
     });
@@ -68,7 +69,7 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithOtp({ phone });
+    const { error } = await getSupabase().auth.signInWithOtp({ phone });
 
     if (error) {
       setError(error.message);
@@ -86,7 +87,7 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.verifyOtp({
+    const { error } = await getSupabase().auth.verifyOtp({
       phone,
       token: otp,
       type: "sms",
@@ -106,7 +107,7 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await getSupabase().auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
