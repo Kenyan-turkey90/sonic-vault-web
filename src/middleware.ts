@@ -1,10 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-/**
- * Middleware: refreshes the Supabase auth session on every request
- * and handles OAuth callback routes.
- */
+const PUBLIC_ROUTES = ["/login", "/signup", "/auth/callback", "/logout"];
+
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -29,15 +27,24 @@ export async function middleware(request: NextRequest) {
     },
   );
 
-  // Refresh session — important for Server Components
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protect /admin — redirect to /login if not authenticated
-  if (request.nextUrl.pathname.startsWith("/admin") && !user) {
+  const path = request.nextUrl.pathname;
+  const isPublic = PUBLIC_ROUTES.some(
+    (r) => path === r || path.startsWith(r + "/"),
+  );
+
+  if (!user && !isPublic) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  if (user && isPublic) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
     return NextResponse.redirect(url);
   }
 
@@ -45,5 +52,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/auth/callback"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/track-visit|api/download|api/subscription|api/ads).*)"],
 };
