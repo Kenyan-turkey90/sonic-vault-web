@@ -36,6 +36,9 @@ export default function LandingPage() {
             Sonic Vault
           </Link>
           <div className="flex items-center gap-6 font-mono text-xs tracking-wider text-[#8A6A24] uppercase">
+            <Link href="/pricing" className="transition hover:text-[#D9A441]">
+              Pricing
+            </Link>
             <a
               href="https://github.com/Kenyan-turkey90/sonic-vault"
               target="_blank"

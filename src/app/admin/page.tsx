@@ -76,17 +76,33 @@ export default async function AdminPage() {
             <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <StatCard label="Website visits" value={stats.totalVisits} tone="zinc" />
               <StatCard label="Total downloads" value={stats.totalDownloads} tone="emerald" />
-              <StatCard label="Android" value={stats.androidDownloads} tone="emerald" hint="APK clicks" />
+              <StatCard label="Active subscribers" value={stats.activeSubscriptions} tone="emerald" />
               <StatCard
-                label="Conversion rate"
-                value={
-                  stats.totalVisits > 0
-                    ? `${((stats.totalDownloads / stats.totalVisits) * 100).toFixed(1)}%`
-                    : "—"
-                }
+                label="Monthly revenue"
+                value={`$${stats.mrr}`}
                 tone="amber"
-                hint="visits → downloads"
+                hint={`${stats.activeSubscriptions} paid`}
               />
+            </section>
+
+            {/* ── subscription breakdown ──────────────────────────────── */}
+            <section className="rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-6">
+              <h2 className="mb-4 text-sm font-semibold text-zinc-200">Subscription breakdown</h2>
+              <div className="grid gap-3 sm:grid-cols-4">
+                {stats.subscriptionBreakdown.map((sub) => (
+                  <div key={sub.plan_id} className="rounded-xl border border-zinc-800/60 bg-zinc-950/40 p-4">
+                    <div className="font-[family-name:var(--font-big-shoulders)] text-lg font-bold uppercase text-zinc-100">
+                      {sub.plan_id}
+                    </div>
+                    <div className="mt-1 text-2xl font-bold tabular-nums text-zinc-100">
+                      {sub.count}
+                    </div>
+                    <div className="mt-0.5 font-mono text-xs text-zinc-500">
+                      ${sub.revenue}/mo
+                    </div>
+                  </div>
+                ))}
+              </div>
             </section>
 
             {/* ── 14-day activity chart ──────────────────────────────── */}

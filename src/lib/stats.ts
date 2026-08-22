@@ -14,6 +14,12 @@ export type RecentDownload = {
   created_at: string;
 };
 
+export type SubscriptionBreakdown = {
+  plan_id: string;
+  count: number;
+  revenue: number;
+};
+
 export type VaultStats = {
   totalVisits: number;
   totalDownloads: number;
@@ -21,6 +27,10 @@ export type VaultStats = {
   iosDownloads: number;
   daily: DayBucket[];
   recentDownloads: RecentDownload[];
+  totalSubscriptions: number;
+  activeSubscriptions: number;
+  subscriptionBreakdown: SubscriptionBreakdown[];
+  mrr: number;
 };
 
 const DAYS_SHOWN = 14;
@@ -114,6 +124,46 @@ export async function getVaultStats(): Promise<VaultStats> {
     .limit(8);
   if (recent.error) throw new Error(`recent downloads failed: ${recent.error.message}`);
 
+  // ── subscription stats ──────────────────────────────────────────────
+  const [totalSubs, activeSubs] = await Promise.all([
+    supabase.from("subscriptions").select("*", { count: "exact", head: true }),
+    supabase
+      .from("subscriptions")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "active"),
+  ]);
+  if (totalSubs.error || activeSubs.error) {
+    throw new Error(
+      "subscription stats failed: " +
+        (totalSubs.error?.message ?? activeSubs.error?.message ?? ""),
+    );
+  }
+
+  // Per-plan breakdown with revenue
+  const PLAN_PRICES: Record<string, number> = {
+    free: 0,
+    basic: 2,
+    pro: 5,
+    premium: 10,
+  };
+  const planIds = ["free", "basic", "pro", "premium"];
+  const breakdownResults = await Promise.all(
+    planIds.map(async (pid) => {
+      const { count } = await supabase
+        .from("subscriptions")
+        .select("*", { count: "exact", head: true })
+        .eq("plan_id", pid)
+        .eq("status", "active");
+      return {
+        plan_id: pid,
+        count: count ?? 0,
+        revenue: (count ?? 0) * (PLAN_PRICES[pid] ?? 0),
+      };
+    }),
+  );
+
+  const mrr = breakdownResults.reduce((sum, b) => sum + b.revenue, 0);
+
   return {
     totalVisits,
     totalDownloads,
@@ -121,5 +171,9 @@ export async function getVaultStats(): Promise<VaultStats> {
     iosDownloads: iosRes.count ?? 0,
     daily: [...buckets.values()],
     recentDownloads: (recent.data as RecentDownload[]) ?? [],
+    totalSubscriptions: totalSubs.count ?? 0,
+    activeSubscriptions: activeSubs.count ?? 0,
+    subscriptionBreakdown: breakdownResults,
+    mrr,
   };
 }
