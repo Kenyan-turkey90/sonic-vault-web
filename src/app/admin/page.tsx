@@ -1,27 +1,36 @@
 import Link from "next/link";
 
-import { logout } from "@/app/admin/actions";
-import { LoginForm } from "@/app/admin/login-form";
-import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { logout } from "@/app/auth/logout-action";
+import { getSupabaseServer } from "@/lib/supabase/server";
 import { getVaultStats, type VaultStats } from "@/lib/stats";
 
 /**
  * Admin dashboard — /admin
  *
- * Gate: renders the password screen unless a valid session cookie exists
- * (see lib/admin-auth.ts). Stats are fetched server-side with the
- * service-role key and never exposed pre-auth.
+ * Gate: renders login prompt unless a valid Supabase Auth session exists.
+ * Stats are fetched server-side with the service-role key and never exposed pre-auth.
  */
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
-  if (!(await isAdminAuthenticated())) {
+  const supabase = await getSupabaseServer();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
     return (
-      <main className="flex min-h-dvh flex-col items-center justify-center bg-zinc-950 px-6">
-        <LoginForm />
-        <Link href="/" className="mt-8 text-xs text-zinc-600 transition hover:text-zinc-400">
-          ← Back to Sonic Vault
-        </Link>
+      <main className="flex min-h-dvh flex-col items-center justify-center bg-[#0B0B0D] px-6">
+        <div className="text-center space-y-4">
+          <h1 className="font-[family-name:var(--font-big-shoulders)] text-3xl font-black uppercase text-[#E9E4D8]">
+            Admin access
+          </h1>
+          <p className="text-sm text-[#B0A89C]">You need to be signed in.</p>
+          <Link
+            href="/login"
+            className="inline-block rounded-xl bg-[#D9A441] px-6 py-3 text-sm font-semibold text-[#0B0B0D] transition hover:bg-[#D9A441]/90"
+          >
+            Sign in
+          </Link>
+        </div>
       </main>
     );
   }

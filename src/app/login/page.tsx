@@ -327,6 +327,16 @@ export default function LoginPage() {
           </div>
         )}
       </div>
+
+      <div className="mt-6 text-center text-xs text-[#8A6A24]">
+        <Link href="/admin" className="hover:text-[#D9A441]">
+          Already signed in? Go to admin
+        </Link>
+        <span className="mx-2">·</span>
+        <a href="/logout" className="hover:text-[#D9A441]">
+          Log out
+        </a>
+      </div>
     </main>
   );
 }
