@@ -26,7 +26,7 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   title: "Sonic Vault — Your music, sealed in the vault",
   description:
-    "A free, open-source Android music player. Offline-first, zero telemetry, full privacy. Download the APK from GitHub.",
+    "A free Android music player. Offline-first, zero telemetry, full privacy. Download the APK from GitHub.",
 };
 
 export default function RootLayout({

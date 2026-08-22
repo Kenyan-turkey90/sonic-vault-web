@@ -22,9 +22,9 @@ const SLIPS = [
   },
   {
     id: "003",
-    feature: "OPEN RELEASE",
+    feature: "SECURE RELEASE",
     desc: "Buildable by anyone. SHA-256 verified APKs, reproducible builds, full changelog with every release.",
-    chip: "OPEN SOURCE",
+    chip: "VERIFIED",
     chipTone: "emerald",
   },
   {

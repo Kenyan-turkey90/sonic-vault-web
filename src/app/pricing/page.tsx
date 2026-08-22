@@ -244,8 +244,8 @@ export default function PricingPage() {
             <p className="mt-1 text-xs text-[#8A6A24]">Powered by Stripe. We never see your card.</p>
           </div>
           <div className="text-center">
-            <div className="font-mono text-lg font-semibold text-[#D9A441]">Open source</div>
-            <p className="mt-1 text-xs text-[#8A6A24]">Audit the code yourself.</p>
+            <div className="font-mono text-lg font-semibold text-[#D9A441]">Built for you</div>
+            <p className="mt-1 text-xs text-[#8A6A24]">Made with care for music lovers.</p>
           </div>
         </div>
       </section>

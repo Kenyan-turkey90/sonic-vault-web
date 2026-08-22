@@ -63,7 +63,7 @@ export default function LandingPage() {
             <span className="inline-block size-1.5 rounded-full bg-[#D9A441]" />
             Sonic Vault
             <span className="text-[#2A2A2E]">&middot;</span>
-            Open Release v14
+            Release v14
           </div>
 
           {/* main headline */}
@@ -82,7 +82,7 @@ export default function LandingPage() {
             className="max-w-md text-sm sm:text-base leading-relaxed text-[#B0A89C] animate-fade-in-up"
             style={{ animationDelay: "0.2s" }}
           >
-            A free, open-source player built for people who own their library.
+            A free player built for people who own their library.
             Offline-first, zero telemetry, and everything stays on your device
             where it belongs.
           </p>
