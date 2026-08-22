@@ -42,7 +42,7 @@ export default function LoginPage() {
 
     const { error } = await getSupabase().auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      options: { emailRedirectTo: "https://sonic-vault-web.vercel.app/auth/callback" },
     });
 
     if (error) {
