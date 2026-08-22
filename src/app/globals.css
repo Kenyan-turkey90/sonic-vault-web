@@ -1,26 +1,77 @@
 @import "tailwindcss";
 
 /*
- * Sonic Vault design tokens — dark-first, zinc surfaces with emerald/amber
- * accents. Deliberately NO blue/purple hues anywhere in the palette.
+ * Sonic Vault — vault-door design tokens
+ *
+ * Palette sourced from the physical world of bank vaults:
+ *   gunmetal steel, brass dials, banker's-green felt, warm paper.
+ * No blue. No purple. No AI-default clusters.
  */
-:root {
-  --background: #09090b; /* zinc-950 */
-  --foreground: #fafafa; /* zinc-50  */
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
+  --color-background: #0B0B0D;
+  --color-foreground: #E9E4D8;
+  --color-steel: #17171A;
+  --color-panel: #1F1F23;
+  --color-brass: #D9A441;
+  --color-brass-deep: #8A6A24;
+  --color-brass-dim: #6B5520;
+  --color-vault-green: #10B981;
+  --color-cream: #E9E4D8;
+  --color-cream-dim: #B0A89C;
+  --color-panel-border: #2A2A2E;
+  --color-red-500: #EF4444;
+  --font-sans: var(--font-archivo);
+  --font-display: var(--font-big-shoulders);
+  --font-mono: var(--font-ibm-plex-mono);
 }
 
 ::selection {
-  background-color: rgb(16 185 129 / 0.35); /* emerald-500 @ 35% */
+  background-color: rgba(217, 164, 65, 0.3); /* brass tint */
+}
+
+/* subtle paper-grain texture via SVG noise */
+html {
+  background-color: #0B0B0D;
+}
+html::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* brass rule utility */
+.brass-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D9A441 15%, #D9A441 85%, transparent);
+}
+
+/* vault green glow */
+.green-glow {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), 0 0 60px rgba(16, 185, 129, 0.05);
+}
+
+/* engrave text shadow for display text */
+.engrave {
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.3);
+}
+
+@keyframes dial-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes pulse-brass {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out both;
 }
