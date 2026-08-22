@@ -232,6 +232,65 @@ export default function PricingPage() {
         })}
       </section>
 
+      {/* ── download section ──────────────────────────────────── */}
+      <section className="mx-auto w-full max-w-3xl px-6 pb-20">
+        <div className="rounded-2xl border border-[#2A2A2E] bg-[#17171A] p-8 sm:p-10">
+          <div className="text-center">
+            <div className="mb-3 font-mono text-[10px] tracking-[0.2em] text-[#8A6A24] uppercase">
+              Ready to play
+            </div>
+            <h2 className="font-[family-name:var(--font-big-shoulders)] text-3xl sm:text-4xl font-black uppercase tracking-[0.02em] text-[#E9E4D8]">
+              Download Sonic Vault
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#B0A89C]">
+              Install the APK on your Android device. Free tier included — upgrade
+              anytime from inside the app.
+            </p>
+          </div>
+
+          {/* download button */}
+          <div className="mt-8 flex justify-center">
+            <form action="/api/download" method="POST">
+              <input type="hidden" name="platform" value="android" />
+              <button
+                type="submit"
+                className="group relative inline-flex flex-col items-center gap-1 rounded-xl border border-[#10B981]/30 bg-[#10B981]/10 px-10 py-4
+                           font-semibold text-[#10B981] transition
+                           hover:border-[#10B981]/50 hover:bg-[#10B981]/20 hover:shadow-[0_0_32px_rgba(16,185,129,0.2)]
+                           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981]
+                           active:scale-[0.98]"
+              >
+                <span className="flex items-center gap-2.5">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-6 transition-transform group-hover:translate-y-0.5" aria-hidden="true">
+                    <path d="M12 3v12m0 0 4-4m-4 4-4-4" />
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                  </svg>
+                  Download APK
+                </span>
+                <span className="font-mono text-[11px] font-normal tracking-wider text-[#10B981]/60">
+                  free forever — no account needed
+                </span>
+              </button>
+            </form>
+          </div>
+
+          {/* file info strip */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-[#2A2A2E] pt-6 font-mono text-[11px] tracking-wider text-[#8A6A24]">
+            <span className="flex items-center gap-1.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-3.5" aria-hidden="true">
+                <rect x="5" y="2" width="14" height="20" rx="2" />
+                <path d="M12 18h.01" />
+              </svg>
+              Android 8.0+
+            </span>
+            <span>v14.0.13</span>
+            <span>arm64-v8a / armeabi-v7a</span>
+            <span>~100 MB</span>
+            <span>SHA-256 verified</span>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-3xl px-6 pb-20">
         <div className="h-px bg-gradient-to-r from-transparent via-[#D9A441]/30 to-transparent" />
         <div className="mt-8 grid gap-6 sm:grid-cols-3">
