@@ -87,20 +87,12 @@ export default function LandingPage() {
             where it belongs.
           </p>
 
-          {/* download CTA + GitHub ghost */}
+          {/* download CTA */}
           <div
             className="flex flex-wrap items-center gap-4 animate-fade-in-up"
             style={{ animationDelay: "0.3s" }}
           >
-            <DownloadButton platform="android" />
-            <a
-              href="https://github.com/Kenyan-turkey90/sonic-vault"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded border border-[#2A2A2E] px-5 py-3.5 font-mono text-xs tracking-wider text-[#B0A89C] uppercase transition hover:border-[#D9A441]/30 hover:text-[#D9A441]"
-            >
-              View source
-            </a>
+            <DownloadButton />
           </div>
         </div>
 
