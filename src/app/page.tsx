@@ -44,6 +44,9 @@ export default function LandingPage() {
             >
               GitHub
             </a>
+            <Link href="/login" className="transition hover:text-[#D9A441]">
+              Log in
+            </Link>
             <Link href="/admin" className="transition hover:text-[#10B981]">
               Admin
             </Link>
