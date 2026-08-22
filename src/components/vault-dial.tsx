@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useMemo } from "react";
+import { useRef, useState, useCallback } from "react";
 
 /**
  * Interactive vault combination dial — the page's signature element.
@@ -8,10 +8,46 @@ import { useRef, useState, useCallback, useMemo } from "react";
  * Behavioral contract:
  *  - Spins on mouse-drag / touch-drag around the center.
  *  - After one full cumulative rotation (360°), the vault "unlocks":
- *    emerald glow appears, hidden content fades in.
+ *    emerald glow appears, combination digits turn green.
  *  - Reduced motion: dial is static, unlocks immediately.
  *  - No-JS: the download form is always functional regardless of lock state.
+ *
+ * Hydration fix: tick marks + numbers are pre-computed at module scope
+ * with toFixed(2) rounding so server and client serialize identical strings.
  */
+
+/** Round to 2 decimal places for SSR/CSR parity. */
+const r2 = (n: number) => Number(n.toFixed(2));
+
+// Pre-compute 60 tick marks at module scope (deterministic, no useMemo needed).
+const TICKS = Array.from({ length: 60 }, (_, i) => {
+  const angle = (i * 6 - 90) * (Math.PI / 180);
+  const isMajor = i % 10 === 0;
+  const isMid = i % 5 === 0;
+  const innerR = isMajor ? 130 : isMid ? 134 : 138;
+  return {
+    i,
+    x1: r2(160 + innerR * Math.cos(angle)),
+    y1: r2(160 + innerR * Math.sin(angle)),
+    x2: r2(160 + 144 * Math.cos(angle)),
+    y2: r2(160 + 144 * Math.sin(angle)),
+    stroke: isMajor ? "#D9A441" : isMid ? "#8A6A24" : "#3A3A3E",
+    strokeWidth: isMajor ? 2.5 : isMid ? 1.5 : 1,
+  };
+});
+
+// Pre-compute numbered positions (every 30°).
+const NUMBERS = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map(
+  (deg) => {
+    const angle = (deg - 90) * (Math.PI / 180);
+    return {
+      deg,
+      x: r2(160 + 120 * Math.cos(angle)),
+      y: r2(160 + 120 * Math.sin(angle)),
+    };
+  },
+);
+
 export function VaultDial() {
   const dialRef = useRef<HTMLDivElement>(null);
   const lastAngleRef = useRef(0);
@@ -65,54 +101,6 @@ export function VaultDial() {
     setIsDragging(false);
   }, []);
 
-  const tickMarks = useMemo(
-    () =>
-      Array.from({ length: 60 }, (_, i) => {
-        const angle = (i * 6 - 90) * (Math.PI / 180);
-        const isMajor = i % 10 === 0;
-        const isMid = i % 5 === 0;
-        const r1 = isMajor ? 130 : isMid ? 134 : 138;
-        const r2 = 144;
-        return (
-          <line
-            key={i}
-            x1={160 + r1 * Math.cos(angle)}
-            y1={160 + r1 * Math.sin(angle)}
-            x2={160 + r2 * Math.cos(angle)}
-            y2={160 + r2 * Math.sin(angle)}
-            stroke={isMajor ? "#D9A441" : isMid ? "#8A6A24" : "#3A3A3E"}
-            strokeWidth={isMajor ? 2.5 : isMid ? 1.5 : 1}
-            strokeLinecap="round"
-          />
-        );
-      }),
-    [],
-  );
-
-  const numbers = useMemo(
-    () =>
-      [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => {
-        const angle = (deg - 90) * (Math.PI / 180);
-        const r = 120;
-        return (
-          <text
-            key={deg}
-            x={160 + r * Math.cos(angle)}
-            y={160 + r * Math.sin(angle)}
-            fill="#D9A441"
-            fontSize="10"
-            fontFamily="var(--font-ibm-plex-mono)"
-            fontWeight="600"
-            textAnchor="middle"
-            dominantBaseline="central"
-          >
-            {deg}
-          </text>
-        );
-      }),
-    [],
-  );
-
   return (
     <div className="relative flex flex-col items-center gap-4">
       <div
@@ -135,8 +123,33 @@ export function VaultDial() {
         >
           <circle cx="160" cy="160" r="155" fill="#17171A" stroke="#2A2A2E" strokeWidth="2" />
           <circle cx="160" cy="160" r="148" fill="none" stroke="#1F1F23" strokeWidth="6" />
-          {tickMarks}
-          {numbers}
+          {TICKS.map((t) => (
+            <line
+              key={t.i}
+              x1={t.x1}
+              y1={t.y1}
+              x2={t.x2}
+              y2={t.y2}
+              stroke={t.stroke}
+              strokeWidth={t.strokeWidth}
+              strokeLinecap="round"
+            />
+          ))}
+          {NUMBERS.map((n) => (
+            <text
+              key={n.deg}
+              x={n.x}
+              y={n.y}
+              fill="#D9A441"
+              fontSize="10"
+              fontFamily="var(--font-ibm-plex-mono)"
+              fontWeight="600"
+              textAnchor="middle"
+              dominantBaseline="central"
+            >
+              {n.deg}
+            </text>
+          ))}
           <circle cx="160" cy="160" r="108" fill="url(#innerFace)" />
           <circle cx="160" cy="160" r="108" fill="none" stroke="#2A2A2E" strokeWidth="1" />
           <circle cx="160" cy="160" r="12" fill="#D9A441" />
