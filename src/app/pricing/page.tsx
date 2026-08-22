@@ -152,7 +152,7 @@ export default function PricingPage() {
 
       <section className="mx-auto max-w-4xl px-6 py-16 text-center sm:py-20">
         <div className="mb-4 font-mono text-[10px] tracking-[0.2em] text-[#8A6A24] uppercase">
-          Open release pricing
+          Simple, transparent pricing
         </div>
         <h1 className="font-[family-name:var(--font-big-shoulders)] text-4xl sm:text-5xl md:text-6xl font-black uppercase leading-[0.95] tracking-[-0.01em] text-[#E9E4D8] engrave">
           Choose your <span className="text-[#D9A441]">vault</span> tier
@@ -245,7 +245,7 @@ export default function PricingPage() {
           </div>
           <div className="text-center">
             <div className="font-mono text-lg font-semibold text-[#D9A441]">Open source</div>
-            <p className="mt-1 text-xs text-[#8A6A24]">GPL-3.0. Audit the code yourself.</p>
+            <p className="mt-1 text-xs text-[#8A6A24]">Audit the code yourself.</p>
           </div>
         </div>
       </section>
@@ -253,7 +253,7 @@ export default function PricingPage() {
       <footer className="border-t border-[#2A2A2E]">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-8">
           <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-[#8A6A24]/50">
-            Manufactured in the open &middot; GPL-3.0
+            Sonic Vault &middot; Built for music lovers
           </span>
           <a href="https://github.com/Kenyan-turkey90/sonic-vault" target="_blank" rel="noreferrer" className="font-mono text-[10px] tracking-[0.15em] uppercase text-[#8A6A24]/50 transition hover:text-[#D9A441]">
             github.com/kenyan-turkey90/sonic-vault

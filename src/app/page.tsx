@@ -121,9 +121,9 @@ export default function LandingPage() {
       {/* ── footer ──────────────────────────────────────────────────── */}
       <footer className="relative z-10 border-t border-[#2A2A2E]">
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-3 px-6 py-8 sm:flex-row sm:justify-between">
-          <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-[#8A6A24]/50">
-            Manufactured in the open &middot; GPL-3.0
-          </span>
+            <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-[#8A6A24]/50">
+              Sonic Vault &middot; Built for music lovers
+            </span>
           <a
             href="https://github.com/Kenyan-turkey90/sonic-vault"
             target="_blank"

@@ -23,7 +23,7 @@ const SLIPS = [
   {
     id: "003",
     feature: "OPEN RELEASE",
-    desc: "GPL-3.0 source, buildable by anyone. SHA-256 verified APKs, reproducible builds, full changelog with every release.",
+    desc: "Buildable by anyone. SHA-256 verified APKs, reproducible builds, full changelog with every release.",
     chip: "OPEN SOURCE",
     chipTone: "emerald",
   },
