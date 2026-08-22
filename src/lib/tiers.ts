@@ -22,7 +22,7 @@ export type PlanId = keyof typeof TIER;
 export type TierLevel = (typeof TIER)[PlanId];
 
 /** Feature flags per plan (mirrors the plans table seed data). */
-const PLAN_FEATURES: Record<PlanId, string[]> = {
+export const PLAN_FEATURES: Record<PlanId, string[]> = {
   free:    ["audio", "ads", "basic-themes", "offline-queue"],
   basic:   ["audio", "no-ads", "lyrics", "equalizer", "offline-download"],
   pro:     ["audio", "video", "no-ads", "lyrics", "equalizer", "offline-download", "cloud-sync", "5gb-hosting"],
